@@ -9,6 +9,8 @@ import csv
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt 
+from tqdm import tqdm
+
 
 def plot_series(time, series, format="-", start=0, end=None):
     plt.plot(time[start:end], series[start:end], format)
@@ -120,16 +122,14 @@ model.fit(dataset,epochs=100,verbose=1)
 # history = model.fit(train_set,epochs=150)
 
 
-
+print("\nForecasting : ")
 
 forecast = []
-print("Forecasting : (This shit takes a lot of time)")
-for time in range(len(series) - window_size):
+for time in tqdm(range(len(series) - window_size)):
   forecast.append(model.predict(series[time:time + window_size][np.newaxis]))
 
 forecast = forecast[split_time-window_size:]
 results = np.array(forecast)[:, 0, 0]
-
 
 plt.figure(figsize=(10, 6))
 plot_series(time_valid, x_valid)
